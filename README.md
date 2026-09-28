@@ -1,0 +1,3 @@
+"Remembering what no longer exists": Hiroshima, Japan
+
+On August 6th 1945 The City of Hiroshima suffered almost complete destruction at the hands of the first Atomic Bomb. The bomb single-handedly unleashed total destruction on a scale previous unheard of this bomb being the first of the two atomic bombs that finally brought history's most devastating conflict to a climactic end. Now 81 years later, we look back on a rebuilt Hiroshima, a city that still bears the scars of the end of the war to this day.
