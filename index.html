@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>=Hiroshima Map Mk5.geojson</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
+    #map { height: 100%; width: 100%; }
+    .title-card {
+      position: absolute; top: 14px; left: 14px; z-index: 1000;
+      background: #fff; padding: 12px 16px; border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.3); max-width: 320px;
+    }
+    .title-card h1 { margin: 0 0 4px; font-size: 1.1rem; }
+    .title-card p  { margin: 0; font-size: 0.85rem; color: #444; }
+    .popup-name { font-weight: 600; font-size: 1rem; margin-bottom: 2px; }
+    .popup-date { color: #666; font-size: 0.82rem; margin-bottom: 6px; }
+    .popup-desc { font-size: 0.9rem; line-height: 1.35; }
+  </style>
+</head>
+<body>
+  <div class="title-card">
+    <h1>Hiroshima: "Remembering What No Longer Exists"</h1>
+    <p>Click any point to read about it. Click it again to zoom in.</p>
+  </div>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+  const MAIN_PLACE = "Hiroshima Hypocenter";
+  const START_ZOOM = 4;
+  const CLICK_ZOOM = 12;
+
+  const data = 
+  
+   {"type":"FeatureCollection",
+"features":
+[{"type":"Feature","geometry":{"type":"Point","coordinates":[129.863054,32.773662]},"properties":{"Name":"Nagasaki Hypocenter","Description":"The Hypocenter of the Second Atomic Bombing of the Japanese city of Nagasaki","Date":"August 9th, 1945"}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[132.454775,34.394856]},"properties":{"Description":"The Hypocenter of the First Atomic Bombing of the Japanese city of Hiroshima. The Bomb exploded above Shima Hospital, roughly 240 meters away from the intended aiming point at Aioi Bridge.","Date":"August 6th, 1945","Name":"Hiroshima Hypocenter"}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[145.639242,15.074553]},"properties":{"Name":"North Field Airbase, North Tinian, Mariana Islands","Description":"The 509th Composite Group was stationed at North Field Airbase when the two B29 Superfortress Strategic Bombers, Enola Gay and Bockscar, carried out their missions of dropping an Atomic Bomb on Hiroshima and Nagasaki respectively in august of 1945, the bombing combined with other pressures from an invading Soviet Union forced the Japanese to agree to terms of surrender on August 15th, finally bringing the bloodiest conflict in human history to an end on September 2nd, 1945.","Date":"August, 1945"}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[132.45361,34.395493]},"properties":{"Name":"Genbaku Dome, Hiroshima, Hiroshima Prefecture, Honshu Island,  Japan","Description":"The Genbaku dome was originally a Product exhibition hall designed by  a Czech Architect named Jan Letzel. \n\nIt was the only structure left standing in the area where Little Boy hit the city.\n\nToday it is a memorial site to the atomic bombing of Hiroshima.","Date":"August 6th, 1945"}},
+{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[132.48172,34.39487],[132.481667,34.396267],[132.481508,34.397658],[132.481243,34.399038],[132.480874,34.400401],[132.480401,34.401743],[132.479828,34.403057],[132.479155,34.40434],[132.478386,34.405584],[132.477525,34.406787],[132.476573,34.407942],[132.475535,34.409046],[132.474415,34.410094],[132.473218,34.411082],[132.471948,34.412006],[132.47061,34.412862],[132.469209,34.413647],[132.467752,34.414358],[132.466243,34.414992],[132.464689,34.415547],[132.463096,34.41602],[132.46147,34.41641],[132.459817,34.416715],[132.458145,34.416933],[132.456459,34.417065],[132.454767,34.417109],[132.453074,34.417065],[132.451388,34.416933],[132.449716,34.416715],[132.448064,34.41641],[132.446438,34.41602],[132.444844,34.415547],[132.44329,34.414992],[132.441782,34.414358],[132.440324,34.413647],[132.438924,34.412862],[132.437586,34.412006],[132.436316,34.411082],[132.435118,34.410094],[132.433998,34.409046],[132.432961,34.407942],[132.432009,34.406787],[132.431147,34.405584],[132.430378,34.40434],[132.429706,34.403057],[132.429132,34.401743],[132.42866,34.400401],[132.42829,34.399038],[132.428025,34.397658],[132.427866,34.396267],[132.427813,34.39487],[132.427866,34.393474],[132.428025,34.392083],[132.42829,34.390703],[132.42866,34.389339],[132.429132,34.387997],[132.429706,34.386682],[132.430378,34.3854],[132.431147,34.384155],[132.432009,34.382952],[132.432961,34.381796],[132.433998,34.380692],[132.435118,34.379644],[132.436316,34.378656],[132.437586,34.377731],[132.438924,34.376875],[132.440324,34.376089],[132.441782,34.375378],[132.44329,34.374743],[132.444844,34.374188],[132.446438,34.373715],[132.448064,34.373325],[132.449716,34.37302],[132.451388,34.372801],[132.453074,34.37267],[132.454767,34.372626],[132.456459,34.37267],[132.458145,34.372801],[132.459817,34.37302],[132.46147,34.373325],[132.463096,34.373715],[132.464689,34.374188],[132.466243,34.374743],[132.467752,34.375378],[132.469209,34.376089],[132.47061,34.376875],[132.471948,34.377731],[132.473218,34.378656],[132.474415,34.379644],[132.475535,34.380692],[132.476573,34.381796],[132.477525,34.382952],[132.478386,34.384155],[132.479155,34.3854],[132.479828,34.386682],[132.480401,34.387997],[132.480874,34.389339],[132.481243,34.390703],[132.481508,34.392083],[132.48172,34.39487]]]},"properties":{"@circle":{"type":"Mercator","center":[132.4547667,34.3948703]},"Name":"Radius of the Blast"}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[132.456811,34.391463]},"properties":{"Name":"Former Bank Of Japan Hiroshima Branch","Date":"August 6th, 1945","Description":"The Former Bank of Japan's Hiroshima Branch was located only 380 meter southeast of the hypocenter. However due to its robust structure it was able to withstand the blast without collapsing. Most of the Bank's staff was exposed to blast however with 37 killed, and 15 injured of 85 workers. The vault remained almost completely undamaged and the bank miraculously reopened two days after the bombing. Today it is a peace museum."}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[132.45059,34.39588]},"properties":{"Name":"Honkawa Elementary School","Description":"An elementary school building that survived the atomic bombing. Today it is a peace museum.","Date":"August 6th, 1945"}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[132.458634,34.391719]},"properties":{"Name":"Fukoromachi Elementary School","Description":"Fukoromachi Elementary School was one of the closest schools to ground zero of the blast. It sustained heavy damage from the bombing and lost about 160 students and teachers."}},
+{"type":"Feature","geometry":{"type":"LineString","coordinates":[[145.639049,15.074419],[141.322964,24.784289],[132.454775,34.394857]]},"properties":{"Date":"August 6th, 1945","Name":"Enola Gay Flight Path"}},
+{"type":"Feature","properties":{"Name":"Ninoshima Island","Description":"An Island off the coast of Hiroshima, immeadiately after the bomb was dropped it was the site of a makeshift field hospital that serviced thousands of the dead and dying from the disaster.","Date":"1945"},"geometry":{"type":"Point","coordinates":[132.436004,34.309354]}},
+{"type":"Feature","properties":{"Name":"Los Angeles","Description":"Los Angeles and other areas of California and the west coast during the 19th and 20th century were very common place for Japanese and other Asian Immigrants to settle. After the war, many Japanese-American Hibakusha returned to Los Angeles and the surrounding areas.","Date":"1900s"},"geometry":{"type":"Point","coordinates":[-118.259757,34.038731]}}]}
+  
+const map = L.map("map");
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19, attribution: "&copy; OpenStreetMap contributors"
+  }).addTo(map);
+
+  function nameOf(props) { return (props && (props.Name || props.name || props.label)) || ""; }
+
+  let mainLatLng = null;
+  const layer = L.geoJSON(data, {
+    pointToLayer: function (feature, latlng) {
+      const isMain = nameOf(feature.properties) === MAIN_PLACE;
+      if (isMain) mainLatLng = latlng;
+      return L.circleMarker(latlng, {
+        radius: isMain ? 11 : 7,
+        fillColor: isMain ? "#c0392b" : "#2c5f8a",
+        color: "#ffffff", weight: 2, fillOpacity: 0.9
+      });
+    },
+    onEachFeature: function (feature, lyr) {
+      const p = feature.properties || {};
+      const name = p.Name || p.name || p.label || "Untitled";
+      const date = p.Date || p.date || "";
+      const desc = p.Description || p.description || "";
+      lyr.bindPopup(
+        '<div class="popup-name">' + name + "</div>" +
+        (date ? '<div class="popup-date">' + date + "</div>" : "") +
+        '<div class="popup-desc">' + desc + "</div>"
+      );
+      lyr.on("click", function () { if (lyr.getLatLng) map.flyTo(lyr.getLatLng(), CLICK_ZOOM); });
+    }
+  }).addTo(map);
+
+  if (mainLatLng) { map.setView(mainLatLng, START_ZOOM); }
+  else if (layer.getBounds().isValid()) { map.fitBounds(layer.getBounds(), { padding: [40, 40] }); }
+  </script>
+</body>
+</html>
